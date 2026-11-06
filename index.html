@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f3ec"><meta name="description" content="Локальный помощник по выбору блюд под бюджет и продукты дома">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg">
+<link rel="stylesheet" href="styles.css"><title>Что готовим?</title>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="#"><span class="brandmark">🥑</span><span>что готовим?</span></a><nav><button class="navbtn active" data-page="discover">Подобрать</button><button class="navbtn" data-page="saved">Мои блюда <span id="savedCount">0</span></button><button class="navbtn" data-page="pantry">Моя кухня</button></nav></header>
+<main>
+<section id="page-discover" class="page active">
+  <section class="intro"><div><p class="eyebrow">ИДЕИ НА КАЖДЫЙ ДЕНЬ</p><h1>Что сегодня<br><em>приготовим?</em></h1><p class="muted">Подберём блюда под твой бюджет, продукты и кухню.</p></div><div class="intro-art">🍲</div></section>
+  <section class="filters card">
+    <div class="section-head"><div><p class="eyebrow">ТВОИ УСЛОВИЯ</p><h2>Соберём меню</h2></div><button id="resetFilters" class="textbtn">Сбросить</button></div>
+    <div class="budgetline"><label for="budget">Бюджет на закупку</label><strong id="budgetValue">2 500 ₽</strong></div>
+    <input id="budget" type="range" min="500" max="10000" step="250" value="2500">
+    <div class="range-labels"><span>500 ₽</span><span>10 000 ₽</span></div>
+    <div class="filter-grid">
+      <div><label class="fieldlabel">Сколько порций?</label><div class="stepper"><button id="minusServ">−</button><b id="servings">2</b><button id="plusServ">+</button></div></div>
+      <div><label class="fieldlabel">Время на готовку</label><select id="timeLimit"><option value="999">Неважно</option><option value="20">До 20 минут</option><option value="30">До 30 минут</option><option value="45">До 45 минут</option></select></div>
+      <div><label class="fieldlabel">Сложность</label><select id="difficulty"><option value="all">Любая</option><option>Легко</option><option>Средне</option><option>Чуть сложнее</option></select></div>
+      <div><label class="fieldlabel">Кухня мира</label><select id="cuisine"><option value="all">Любая кухня</option></select></div>
+    </div>
+    <div class="filter-note">Учитываем только продукты для покупки. Соль, сахар, масло и базовые специи считаем уже имеющимися.</div>
+  </section>
+  <section class="results-head"><div><p class="eyebrow">ТВОЯ ЛЕНТА</p><h2>Варианты для тебя</h2><p id="resultMeta" class="muted small"></p></div><button id="shuffle" class="roundbtn" aria-label="Перемешать">↻</button></section>
+  <div id="deck" class="deck"></div>
+  <div id="empty" class="empty card hidden"><div>🧑‍🍳</div><h3>Пока ничего не нашлось</h3><p>Попробуй увеличить бюджет или изменить фильтры.</p><button class="primary" id="loosen">Показать больше вариантов</button></div>
+  <div class="swipe-hint">← не моё <span>↓ позже</span> хочу попробовать →</div>
+</section>
+<section id="page-saved" class="page">
+  <div class="page-title"><p class="eyebrow">ТВОЯ КОЛЛЕКЦИЯ</p><h1>Мои блюда</h1><p class="muted">Понравившиеся рецепты и идеи на потом.</p></div>
+  <div class="tabs"><button class="tab active" data-saved="liked">❤️ Понравилось</button><button class="tab" data-saved="later">🕒 На потом</button></div>
+  <div id="savedGrid" class="recipe-grid"></div>
+</section>
+<section id="page-pantry" class="page">
+  <div class="page-title"><p class="eyebrow">ТВОЯ КУХНЯ</p><h1>Что есть дома?</h1><p class="muted">Отметь продукты и технику — подборка станет точнее. Эти данные сохраняются только на этом устройстве.</p></div>
+  <div class="card pantry-card"><div class="section-head"><h2>🥕 Продукты</h2><span class="pill" id="pantryCount">0 выбрано</span></div><input id="ingredientSearch" class="search" placeholder="Найти продукт…"><div id="ingredientList" class="chiplist"></div></div>
+  <div class="card pantry-card"><div class="section-head"><h2>🍳 Техника</h2></div><p class="muted small">Выбери то, чем можешь пользоваться.</p><div id="applianceList" class="chiplist"></div></div>
+  <div class="card pantry-card"><h2>🧂 Базовые продукты</h2><p class="muted">Соль, сахар, растительное масло, перец и вода автоматически считаются доступными — отмечать их не нужно.</p></div>
+  <div class="card pantry-card"><h2>💾 Данные на устройстве</h2><p class="muted">Все отметки и настройки сохраняются в памяти этого устройства. Чтобы перенести их на другое устройство, создай резервную копию и импортируй её там.</p><div class="modal-bottom"><button class="primary" id="exportBackup">Экспортировать копию</button><button class="textbtn" id="importBackup">Импортировать</button></div><input id="backupFile" type="file" accept="application/json,.json" hidden><button class="textbtn" id="clearLocalData" style="margin-top:12px">Очистить данные на этом устройстве</button></div>
+</section>
+</main>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-backdrop" data-close></div><article class="modal-panel"><button class="close" data-close aria-label="Закрыть">×</button><div id="modalContent"></div></article></div>
+<div id="toast" class="toast"></div>
+<footer>Сделано с аппетитом · Все данные хранятся локально</footer>
+<script src="app.js"></script>
+</body></html>
